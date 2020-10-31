@@ -87,6 +87,10 @@ app.get('/restaurantlist/:mealtype', (req,res) => {
     }else if(req.query.lcost && req.query.hcost){
         query={"type.mealtype":req.params.mealtype,"cost":{$lt:parseInt(req.query.lcost),$gt:parseInt(req.query.hcost)} }
     }
+    else if(req.query.sort){
+        query={"type.mealtype":req.params.mealtype}
+        sort={cost:Number(req.query.sort)}
+    }
     db.collection('restaurent').find(query).sort(sort).toArray((err,result) =>{
         if(err) throw err;
         res.send(result)
@@ -115,7 +119,7 @@ app.post('/placeorder',(req,res) => {
 
 MongoClient.connect(mongoUrl,(err,client) => {
     if(err) console.log(err);
-    db = client.db('Edumato');
+    db = client.db('edurekinternship');
     app.listen(port,(err) => {
         if(err) throw err;
         console.log(`Server is running on port ${port}`)
